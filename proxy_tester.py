@@ -1,4 +1,3 @@
-# proxy_tester.py
 import asyncio
 import aiohttp
 from aiohttp_socks import ProxyConnector
@@ -12,7 +11,6 @@ import argparse
 import os
 from pathlib import Path
 
-# Добавляем пути для импорта
 sys.path.insert(0, str(Path(__file__).parent))
 
 from locales import i18n
@@ -21,13 +19,11 @@ from config.settings import config
 class ProxyTester:
     def __init__(self, input_file=None, output_file=None, timeout=None, 
                  max_concurrent=None, lang=None):
-        # Загружаем настройки из конфига
         self.input_file = input_file or config.get_default_input_file('standard')
         self.output_file = output_file or config.get_default_output_file('standard')
         self.timeout = timeout or config.get('timeout', 10)
         self.max_concurrent = max_concurrent or config.get('max_concurrent', 50)
         
-        # Устанавливаем язык
         self.lang = lang or config.get('language', 'en')
         i18n.set_language(self.lang)
         
@@ -40,11 +36,9 @@ class ProxyTester:
         ])
         
     def _t(self, key, **kwargs):
-        """Helper метод для получения перевода"""
         return i18n.get(key, **kwargs)
     
     def read_proxies(self):
-        """Читает прокси из файла"""
         proxies = []
         try:
             with open(self.input_file, 'r', encoding='utf-8') as f:
@@ -64,14 +58,11 @@ class ProxyTester:
             return []
     
     def normalize_proxy(self, proxy_str):
-        """Приводит прокси к единому формату"""
         proxy_str = proxy_str.strip()
         
-        # Если уже есть схема
         if proxy_str.startswith(('http://', 'https://', 'socks4://', 'socks5://')):
             return proxy_str
         
-        # Если есть только IP:PORT
         if ':' in proxy_str:
             parts = proxy_str.split(':')
             if len(parts) >= 2:
@@ -87,7 +78,6 @@ class ProxyTester:
         return None
     
     def get_proxy_type(self, proxy_url):
-        """Определяет тип прокси"""
         if proxy_url.startswith('socks5://'):
             return 'socks5'
         elif proxy_url.startswith('socks4://'):
@@ -99,7 +89,6 @@ class ProxyTester:
         return 'http'
     
     async def test_single_proxy(self, proxy_url):
-        """Тестирует один прокси"""
         proxy_type = self.get_proxy_type(proxy_url)
         
         for test_url in self.test_urls:
@@ -140,7 +129,6 @@ class ProxyTester:
         return False, proxy_url, self._t('test_failed')
     
     async def test_proxies_batch(self, proxies):
-        """Тестирует прокси батчами с прогресс-баром"""
         semaphore = asyncio.Semaphore(self.max_concurrent)
         
         async def test_with_semaphore(proxy):
@@ -173,20 +161,17 @@ class ProxyTester:
         return results
     
     def save_working_proxies(self):
-        """Сохраняет рабочие прокси в файл с сортировкой по типам"""
         if not self.working_proxies:
             print(self._t('no_working_proxies'))
             return
         
         try:
             with open(self.output_file, 'w', encoding='utf-8') as f:
-                # Заголовок
                 f.write(f"# {self._t('app_title')} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"# {self._t('total_checked', count=len(self.working_proxies))}\n")
                 f.write(f"# {self._t('sorting')}\n")
                 f.write("#" + "=" * 58 + "\n\n")
                 
-                # Статистика по типам
                 f.write(f"# {self._t('working_by_type')}\n")
                 for proxy_type in ['socks5', 'socks4', 'https', 'http']:
                     count = len(self.working_by_type.get(proxy_type, []))
@@ -194,7 +179,6 @@ class ProxyTester:
                         f.write(f"#   {proxy_type.upper()}: {count}\n")
                 f.write("\n")
                 
-                # Сортируем по приоритету
                 type_order = ['socks5', 'socks4', 'https', 'http']
                 
                 for proxy_type in type_order:
@@ -211,7 +195,6 @@ class ProxyTester:
             print(self._t('unknown_error', error=str(e)))
     
     async def run(self):
-        """Запускает тестирование"""
         print("=" * 60)
         print(f"🚀 {self._t('app_title')} v2.0")
         print("=" * 60)
@@ -262,7 +245,6 @@ class ProxyTester:
         print(f"\n{self._t('testing_complete')}")
 
 def main():
-    """Основная функция"""
     parser = argparse.ArgumentParser(description='Proxy tester with multi-language support')
     parser.add_argument('-i', '--input', help='Input file with proxies')
     parser.add_argument('-o', '--output', help='Output file for working proxies')
@@ -272,7 +254,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Определяем язык
     lang = args.lang
     if not lang and config.get('auto_detect_language', True):
         lang = config.detect_language()
