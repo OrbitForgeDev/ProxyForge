@@ -45,6 +45,7 @@ The interactive menu will prompt you to select a mode, proxy file, and additiona
 ### Example: Standard Mode
 
 1. Create a `proxies.txt` file (one proxy per line):
+
    *The proxies.txt file is shown as an example. Create it yourself and add your proxies.*
    ```
    192.168.1.1:8080
