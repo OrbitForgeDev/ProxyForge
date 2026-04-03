@@ -1,4 +1,3 @@
-# locales/__init__.py
 import json
 import os
 from pathlib import Path
@@ -10,7 +9,7 @@ class I18n:
     _instance = None
     _translations: Dict[str, Dict[str, str]] = {}
     _current_lang: str = 'en'
-    _verbose: bool = False  # Добавляем флаг для вывода сообщений
+    _verbose: bool = False 
     
     def __new__(cls):
         if cls._instance is None:
@@ -37,7 +36,6 @@ class I18n:
                 if self._verbose:
                     print(f"❌ Error loading {lang_file}: {e}")
         
-        # Если не загружено ни одного перевода, создаем пустой
         if not self._translations:
             self._translations['en'] = {}
             if self._verbose:
@@ -64,7 +62,6 @@ class I18n:
         """
         translation = self._translations.get(self._current_lang, {})
         
-        # Поддержка точечной нотации (например, 'menu.title')
         keys = key.split('.')
         value = translation
         for k in keys:
@@ -77,12 +74,10 @@ class I18n:
         if value is None:
             value = default or key
         
-        # Подставляем параметры
         if kwargs and isinstance(value, str):
             try:
                 value = value.format(**kwargs)
             except (KeyError, ValueError):
-                # Если параметр не найден, оставляем как есть
                 pass
         
         return value
@@ -95,5 +90,4 @@ class I18n:
         """Возвращает текущий язык"""
         return self._current_lang
 
-# Создаем глобальный экземпляр
 i18n = I18n()
