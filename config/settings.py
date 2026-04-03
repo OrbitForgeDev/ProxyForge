@@ -1,4 +1,3 @@
-# config/settings.py
 import os
 import json
 import platform
@@ -7,7 +6,6 @@ from typing import Dict, Any, Optional
 import locale
 
 class Config:
-    """Класс для управления конфигурацией приложения"""
     
     _instance = None
     _config: Dict[str, Any] = {}
@@ -20,7 +18,6 @@ class Config:
         return cls._instance
     
     def _get_config_path(self) -> Path:
-        """Возвращает путь к файлу конфигурации"""
         if platform.system() == 'Windows':
             config_dir = Path(os.environ.get('APPDATA', Path.home() / 'AppData/Roaming'))
         else:
@@ -33,7 +30,6 @@ class Config:
         return self._config_file
     
     def _get_default_config(self) -> Dict[str, Any]:
-        """Возвращает конфигурацию по умолчанию"""
         return {
             'language': 'en',
             'timeout': 10,
@@ -62,7 +58,6 @@ class Config:
         }
     
     def _load_config(self) -> None:
-        """Загружает конфигурацию из файла"""
         config_file = self._get_config_path()
         default_config = self._get_default_config()
         
@@ -70,10 +65,8 @@ class Config:
             try:
                 with open(config_file, 'r', encoding='utf-8') as f:
                     loaded_config = json.load(f)
-                    # Объединяем с дефолтными, но не перезаписываем существующие
                     self._config = {**default_config, **loaded_config}
                     
-                    # Проверяем и исправляем потенциально проблемные значения
                     if 'telegram_input_file' not in self._config or not self._config.get('telegram_input_file'):
                         self._config['telegram_input_file'] = 'proxies.txt'
                     if not self._config.get('input_file'):
@@ -94,12 +87,10 @@ class Config:
             print(f"✅ Created default config at {config_file}")
     
     def _save_config(self) -> None:
-        """Сохраняет конфигурацию в файл"""
         if not self._config_file:
             self._get_config_path()
         
         try:
-            # Создаем копию для сохранения (только основные настройки)
             config_to_save = {
                 'language': self._config.get('language'),
                 'timeout': self._config.get('timeout'),
@@ -117,17 +108,14 @@ class Config:
             print(f"⚠️ Error saving config: {e}")
     
     def get(self, key: str, default: Any = None) -> Any:
-        """Получает значение настройки"""
         return self._config.get(key, default)
     
     def set(self, key: str, value: Any, save: bool = True) -> None:
-        """Устанавливает значение настройки"""
         self._config[key] = value
         if save:
             self._save_config()
     
     def detect_language(self) -> str:
-        """Автоматически определяет язык системы"""
         if not self.get('auto_detect_language'):
             return self.get('language', 'en')
         
@@ -141,13 +129,11 @@ class Config:
         return 'en'
     
     def get_default_input_file(self, mode: str = 'standard') -> str:
-        """Возвращает файл по умолчанию для указанного режима"""
         if mode == 'telegram':
             filename = self.get('telegram_input_file', self.get('input_file', 'proxies.txt'))
         else:
             filename = self.get('input_file', 'proxies.txt')
         
-        # Проверяем, что имя файла не пустое и не None
         if not filename or filename == 'None':
             filename = 'proxies.txt'
             if mode == 'telegram':
@@ -159,13 +145,11 @@ class Config:
         return filename
     
     def get_default_output_file(self, mode: str = 'standard') -> str:
-        """Возвращает выходной файл по умолчанию для указанного режима"""
         if mode == 'telegram':
             filename = self.get('telegram_output_file', 'telegram_proxies.txt')
         else:
             filename = self.get('output_file', 'working_proxies.txt')
         
-        # Проверяем, что имя файла не пустое и не None
         if not filename or filename == 'None':
             filename = 'telegram_proxies.txt' if mode == 'telegram' else 'working_proxies.txt'
             if mode == 'telegram':
@@ -177,7 +161,6 @@ class Config:
         return filename
     
     def update_proxy_files(self, input_file: str, output_file: Optional[str] = None, mode: str = 'standard') -> None:
-        """Обновляет настройки файлов в конфиге"""
         if not input_file or input_file == 'None':
             input_file = 'proxies.txt'
         
@@ -192,21 +175,11 @@ class Config:
         self._save_config()
     
     def reset_config(self) -> None:
-        """Сбрасывает конфигурацию к настройкам по умолчанию"""
-        # Получаем дефолтную конфигурацию
         default_config = self._get_default_config()
-        
-        # Обновляем текущую конфигурацию
         self._config = default_config.copy()
-        
-        # Сохраняем в файл
         self._save_config()
-        
-        # Обновляем язык в i18n
         from locales import i18n
         i18n.set_language(self._config.get('language', 'en'))
-        
         print("✅ Configuration reset to defaults")
 
-# Глобальный экземпляр конфигурации
 config = Config()
