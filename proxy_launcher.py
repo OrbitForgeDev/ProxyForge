@@ -1,11 +1,9 @@
-# proxy_launcher.py
 import os
 import sys
 import subprocess
 import platform
 from pathlib import Path
 
-# Добавляем пути для импорта
 sys.path.insert(0, str(Path(__file__).parent))
 
 from locales import i18n
@@ -33,15 +31,12 @@ class ProxyLauncher:
         i18n.set_language(self.current_lang)
     
     def _t(self, key, **kwargs):
-        """Helper для переводов"""
         return i18n.get(key, **kwargs)
     
     def clear_screen(self):
-        """Очищает экран в зависимости от ОС"""
         os.system('cls' if platform.system() == 'Windows' else 'clear')
     
     def select_language(self):
-        """Выбор языка"""
         print("\n" + "=" * 60)
         print(self._t('language.title'))
         print("  1. English")
@@ -64,7 +59,6 @@ class ProxyLauncher:
         return self.current_lang
     
     def print_header(self):
-        """Выводит заголовок программы"""
         print("=" * 60)
         print(f"🚀 {self._t('app_title')} v2.0")
         print(f"   {self._t('app_description')}")
@@ -72,7 +66,6 @@ class ProxyLauncher:
         print()
     
     def print_menu(self):
-        """Выводит главное меню"""
         print(f"{self._t('menu.title')}:")
         print("-" * 40)
         for key, script_info in self.scripts.items():
@@ -88,7 +81,6 @@ class ProxyLauncher:
         print("-" * 40)
     
     def reset_configuration(self):
-        """Сбрасывает конфигурацию к настройкам по умолчанию"""
         print("\n" + "=" * 60)
         print("⚠️ " + self._t('reset.title'))
         print("=" * 60)
@@ -102,28 +94,23 @@ class ProxyLauncher:
             return
         
         if confirm == 'y':
-            # Сбрасываем конфигурацию
             config.reset_config()
             
-            # Обновляем язык
             self.current_lang = config.get('language', 'en')
             i18n.set_language(self.current_lang)
             
-            # Обновляем пути к файлам в scripts
             self.scripts['1']['default_output'] = config.get_default_output_file('standard')
             self.scripts['2']['default_output'] = config.get_default_output_file('telegram')
             
             print("\n✅ " + self._t('reset.success'))
             print(self._t('reset.restart'))
             input("\n" + self._t('press_enter'))
-            # Перезапускаем программу
             os.execv(sys.executable, [sys.executable] + sys.argv)
         else:
             print("\n❌ " + self._t('reset.cancelled'))
             input("\n" + self._t('press_enter'))
     
     def check_file_exists(self, filename, create_template=False):
-        """Проверяет существование файла и предлагает создать шаблон"""
         if not filename or filename == 'None':
             filename = "proxies.txt"
             
@@ -143,7 +130,6 @@ class ProxyLauncher:
         return True
     
     def create_template_file(self, filename):
-        """Создает шаблонный файл с примерами прокси"""
         try:
             with open(filename, 'w', encoding='utf-8') as f:
                 f.write("# " + self._t('template.header') + "\n")
@@ -167,44 +153,39 @@ class ProxyLauncher:
             return False
     
     def get_input_file(self, mode='standard'):
-    	"""Запрашивает имя входного файла с прокси"""
-    	print(f"\n{self._t('input_file.title')}:")
-    	print("-" * 40)
+        print(f"\n{self._t('input_file.title')}:")
+        print("-" * 40)
     
-    	default_file = config.get_default_input_file(mode)
+        default_file = config.get_default_input_file(mode)
     
-    	# Проверяем, что default_file не пустой
-    	if not default_file or default_file == 'None':
-           default_file = "proxies.txt"
+        if not default_file or default_file == 'None':
+            default_file = "proxies.txt"
     
-    	# Показываем вопрос с подстановкой значения
-    	print(self._t('input_file.default_question') + f"'{default_file}'? (y/n): ", end="")
-    	try:
+        print(self._t('input_file.default_question') + f"'{default_file}'? (y/n): ", end="")
+        try:
             choice = input().lower()
-    	except (EOFError, KeyboardInterrupt):
+        except (EOFError, KeyboardInterrupt):
             print("\n")
             return default_file
     
-    	if choice == 'y':
+        if choice == 'y':
             filename = default_file
-    	else:
+        else:
             try:
-            	filename = input(self._t('input_file.enter_filename')).strip()
+                filename = input(self._t('input_file.enter_filename')).strip()
             except (EOFError, KeyboardInterrupt):
-            	print("\n")
-            	filename = default_file
+                print("\n")
+                filename = default_file
     
-    	if not filename or filename == 'None':
-        	filename = default_file
-        	print(self._t('input_file.using_default', file=filename))
+        if not filename or filename == 'None':
+            filename = default_file
+            print(self._t('input_file.using_default', file=filename))
     
-    	# Сохраняем в конфиг
-    	config.update_proxy_files(filename, None, mode)
+        config.update_proxy_files(filename, None, mode)
     
-    	return filename
+        return filename
     
     def get_additional_args(self, script_name, mode):
-        """Запрашивает дополнительные аргументы для конкретного скрипта"""
         args = []
         
         if script_name == 'proxy_tester_telegram.py':
@@ -231,39 +212,36 @@ class ProxyLauncher:
         return args
     
     def get_advanced_settings(self):
-    	"""Запрашивает расширенные настройки"""
-    	print(f"\n{self._t('advanced_settings.title')}:")
-    	print("-" * 40)
-    	print(self._t('advanced_settings.press_enter'))
+        print(f"\n{self._t('advanced_settings.title')}:")
+        print("-" * 40)
+        print(self._t('advanced_settings.press_enter'))
     
-    	default_timeout = config.get('timeout', 10)
-    	print(self._t('advanced_settings.timeout') + f"[{default_timeout}]: ", end="")
-    	try:
+        default_timeout = config.get('timeout', 10)
+        print(self._t('advanced_settings.timeout') + f"[{default_timeout}]: ", end="")
+        try:
             timeout_input = input().strip()
-    	except (EOFError, KeyboardInterrupt):
+        except (EOFError, KeyboardInterrupt):
             print("\n")
             timeout_input = ""
-    	timeout = timeout_input if timeout_input else str(default_timeout)
+        timeout = timeout_input if timeout_input else str(default_timeout)
     
-    	default_concurrent = config.get('max_concurrent', 50)
-    	print(self._t('advanced_settings.concurrent') + f"[{default_concurrent}]: ", end="")
-    	try:
+        default_concurrent = config.get('max_concurrent', 50)
+        print(self._t('advanced_settings.concurrent') + f"[{default_concurrent}]: ", end="")
+        try:
             concurrent_input = input().strip()
-    	except (EOFError, KeyboardInterrupt):
+        except (EOFError, KeyboardInterrupt):
             print("\n")
             concurrent_input = ""
-    	concurrent = concurrent_input if concurrent_input else str(default_concurrent)
+        concurrent = concurrent_input if concurrent_input else str(default_concurrent)
     
-    	return timeout, concurrent
+        return timeout, concurrent
     
     def run_script(self, script_name, input_file, timeout, concurrent, additional_args, mode):
-        """Запускает выбранный скрипт"""
         if not os.path.exists(script_name):
             print(f"\n{self._t('errors.script_not_found', script=script_name)}")
             print(self._t('errors.check_folder'))
             return False
         
-        # Формируем команду
         cmd = [
             sys.executable,
             script_name,
@@ -273,12 +251,10 @@ class ProxyLauncher:
             '-l', self.current_lang
         ]
         
-        # Добавляем выходной файл если указан
         output_file = config.get_default_output_file(mode)
         if output_file and output_file != 'None':
             cmd.extend(['-o', output_file])
         
-        # Добавляем дополнительные аргументы
         cmd.extend(additional_args)
         
         print("\n" + "=" * 60)
@@ -310,7 +286,6 @@ class ProxyLauncher:
             return False
     
     def show_results(self, script_info):
-        """Показывает результаты проверки"""
         output_file = script_info['default_output']
         
         if not output_file or output_file == 'None':
@@ -321,7 +296,6 @@ class ProxyLauncher:
             print(f"📊 {self._t('results.title')}")
             print("=" * 60)
             
-            # Считаем количество прокси
             with open(output_file, 'r', encoding='utf-8') as f:
                 lines = [line.strip() for line in f if line.strip() and not line.startswith('#')]
                 working_count = len(lines)
@@ -329,7 +303,6 @@ class ProxyLauncher:
             print(self._t('results.working_count', count=working_count))
             print(self._t('results.saved_to', file=output_file))
             
-            # Показываем несколько примеров
             if working_count > 0:
                 print(f"\n{self._t('examples_title')}")
                 for proxy in lines[:5]:
@@ -337,7 +310,6 @@ class ProxyLauncher:
                 if working_count > 5:
                     print(self._t('examples_more', count=working_count - 5))
             
-            # Предлагаем открыть файл
             try:
                 choice = input(f"\n{self._t('results.open_file')}").lower()
             except (EOFError, KeyboardInterrupt):
@@ -347,16 +319,14 @@ class ProxyLauncher:
             if choice == 'y':
                 if platform.system() == 'Windows':
                     os.startfile(output_file)
-                elif platform.system() == 'Darwin':  # macOS
+                elif platform.system() == 'Darwin':
                     subprocess.run(['open', output_file])
-                else:  # Linux
+                else:
                     subprocess.run(['xdg-open', output_file])
         else:
             print(f"\n{self._t('results.file_not_found')}")
     
     def run(self):
-        """Основной цикл программы"""
-        # Сначала выбираем язык
         self.select_language()
         
         while True:
@@ -385,25 +355,19 @@ class ProxyLauncher:
             
             script_info = self.scripts[choice]
             
-            # Получаем имя входного файла
             input_file = self.get_input_file(script_info['mode'])
             
-            # Проверяем существование файла
             if not self.check_file_exists(input_file, create_template=True):
                 print(f"\n{self._t('errors.cannot_continue')}")
                 input("\n" + self._t('press_enter'))
                 continue
             
-            # Получаем дополнительные аргументы
             additional_args = self.get_additional_args(script_info['script'], script_info['mode'])
             
-            # Получаем расширенные настройки
             timeout, concurrent = self.get_advanced_settings()
             
-            # Получаем название режима для отображения
             mode_name = self._t(f'menu.{script_info["name_key"]}')
             
-            # Подтверждение запуска
             print("\n" + "=" * 60)
             print(f"📋 {self._t('confirmation.title')}:")
             print(f"   {self._t('confirmation.mode', mode=mode_name)}")
@@ -423,7 +387,6 @@ class ProxyLauncher:
                 input("\n" + self._t('press_enter'))
                 continue
             
-            # Запускаем скрипт
             success = self.run_script(
                 script_info['script'],
                 input_file,
@@ -433,14 +396,12 @@ class ProxyLauncher:
                 script_info['mode']
             )
             
-            # Показываем результаты
             if success:
                 self.show_results(script_info)
             
             input("\n\n" + self._t('press_enter'))
 
 def main():
-    """Основная функция"""
     launcher = ProxyLauncher()
     
     try:
