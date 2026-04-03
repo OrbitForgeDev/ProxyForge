@@ -1,0 +1,156 @@
+{
+    "app_title": "Proxy Tester",
+    "app_description": "Powerful asynchronous proxy testing tool with Telegram support",
+    
+    "loading_proxies": "📖 Loaded {count} proxies from {file}",
+    "file_not_found": "❌ File {file} not found!",
+    "no_proxies": "❌ No proxies to test",
+    "testing_start": "🔍 Starting testing of {count} proxies...",
+    "timeout_setting": "⏱️ Timeout: {timeout} sec",
+    "concurrent_setting": "🔄 Max concurrent checks: {concurrent}",
+    "testing": "Testing proxies",
+    
+    "statistics": "📊 STATISTICS",
+    "total_checked": "Total checked: {count}",
+    "working": "Working: {count}",
+    "not_working": "Not working: {count}",
+    "success_rate": "Success rate: {rate:.1f}%",
+    
+    "working_by_type": "Working proxies by type:",
+    "socks5": "SOCKS5: {count} pcs",
+    "socks4": "SOCKS4: {count} pcs",
+    "https": "HTTPS: {count} pcs",
+    "http": "HTTP: {count} pcs",
+    
+    "saved_proxies": "💾 Saved {count} working proxies to {file}",
+    "saved_sorted": "📊 Sorted by type (SOCKS5 → HTTPS → HTTP)",
+    "no_working_proxies": "⚠️ No working proxies to save",
+    
+    "examples_title": "📋 EXAMPLES OF WORKING PROXIES:",
+    "examples_more": "... and {count} more",
+    
+    "testing_complete": "✅ Testing complete!",
+    "no_working_found": "❌ No working proxies found!",
+    
+    "telegram_title": "🚀 TELEGRAM PROXY TESTER",
+    "telegram_checking": "🔍 Testing {count} proxies for Telegram...",
+    "telegram_with_token": "🤖 Checking with bot token: {token}...",
+    "telegram_without_token": "🤖 Checking without token (Telegram API availability only)",
+    
+    "telegram_working": "Working for Telegram: {count}",
+    "telegram_usage_title": "💡 These proxies can be used for:",
+    "telegram_usage_1": "• Running Telegram bots",
+    "telegram_usage_2": "• Working with Telegram API",
+    "telegram_usage_3": "• Parsing Telegram",
+    
+    "proxy_connection_error": "❌ Proxy connection error: {error}",
+    "timeout_error": "❌ Timeout ({timeout}s)",
+    "client_error": "❌ Client error: {error}",
+    "unknown_error": "❌ Unknown error: {error}",
+    "test_failed": "❌ Failed tests",
+    
+    "telegram_connection_failed": "❌ Failed to connect to Telegram",
+    "telegram_api_available": "✅ Telegram API available via {type}",
+    "telegram_bot_working": "✅ Telegram bot works via {type} - {info}",
+    "telegram_api_not_responding": "⚠️ Telegram available but API not responding via {type}",
+    
+    "menu": {
+        "title": "📋 AVAILABLE TEST MODES",
+        "standard": "Standard Proxy Check",
+        "standard_desc": "Checks proxies via HTTP/HTTPS requests",
+        "telegram": "Telegram Proxy Check",
+        "telegram_desc": "Checks proxies specifically for Telegram API and bots",
+        "exit": "Exit",
+        "reset": "Reset Configuration",
+        "choice": "Select mode (0-2): ",
+        "prompt": "Select mode (0-2, r for reset): "
+    },
+
+    "reset": {
+        "title": "RESET CONFIGURATION",
+        "warning": "This will reset all settings to default values!",
+        "confirm": "Are you sure you want to reset all settings to defaults? (y/n): ",
+        "success": "Configuration reset to defaults!",
+        "restart": "Please restart the program.",
+        "cancelled": "Reset cancelled"
+    },
+
+    "create_template_question": "📝 Create template file? (y/n): ",
+    "press_enter": "Press Enter to continue...",
+
+    "template": {
+        "header": "Examples of proxies (uncomment needed lines)",
+        "format": "Format: IP:PORT or http://IP:PORT or socks5://IP:PORT",
+        "examples": "Examples",
+        "working_examples": "Working examples (you can delete them)",
+        "created": "Created template file '{file}'",
+        "add_proxies": "Add your proxies to this file and run the program again",
+        "error": "Error creating file: {error}"
+    },
+    
+    "input_file": {
+        "title": "📂 INPUT FILE SETUP",
+        "default_question": "📁 Use default file ",
+        "enter_filename": "📁 Enter proxy file name: ",
+        "using_default": "⚠️ Using default file: {file}"
+    },
+    
+    "telegram_setup": {
+        "title": "🤖 TELEGRAM CHECK SETUP",
+        "bot_token_question": "Do you want to check with bot token? (y/n): ",
+        "enter_token": "Enter Telegram bot token: ",
+        "token_added": "✅ Token added"
+    },
+    
+    "advanced_settings": {
+        "title": "⚙️ ADVANCED SETTINGS",
+        "press_enter": "Press Enter to use default values",
+        "timeout": "⏱️ Timeout (sec) ",
+        "concurrent": "🔄 Concurrent checks "
+    },
+    
+    "confirmation": {
+        "title": "📋 CONFIRMATION",
+        "mode": "Mode: {mode}",
+        "input_file": "Input file: {file}",
+        "timeout": "Timeout: {timeout} sec",
+        "concurrent": "Concurrent checks: {concurrent}",
+        "run_question": "✅ Run check? (y/n): ",
+        "cancelled": "❌ Check cancelled",
+        "success": "✅ Script completed successfully",
+        "error": "⚠️ Script completed with error",
+        "interrupted": "⚠️ Check interrupted by user"
+    },
+    
+    "results": {
+        "title": "📊 RESULTS",
+        "working_count": "✅ Working proxies found: {count}",
+        "saved_to": "💾 Results saved to: {file}",
+        "open_file": "📁 Open results file? (y/n): ",
+        "file_not_found": "⚠️ Results file not found"
+    },
+    
+    "language": {
+        "title": "Select language / Выберите язык:",
+        "choice": "Your choice / Ваш выбор (1-2): "
+    },
+    
+    "errors": {
+        "invalid_choice": "❌ Invalid choice!",
+        "script_not_found": "❌ Script '{script}' not found!",
+        "check_folder": "Make sure the file is in the same folder",
+        "cannot_continue": "❌ Cannot continue without proxy file",
+        "critical": "❌ Critical error: {error}"
+    },
+    
+    "proxy_type": "Proxy type: {type}",
+    "latency": "Latency: {latency}ms",
+    "bot_status": "Bot check: {status}",
+    "working_proxy": "✅ {type} works - {info}",
+    "sorting": "📊 Sorting by type (SOCKS5 → HTTPS → HTTP)",
+    
+    "progress": {
+        "working_label": "Working:",
+        "last_label": "last"
+    }
+}
