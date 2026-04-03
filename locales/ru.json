@@ -1,0 +1,156 @@
+{
+    "app_title": "Тестер Прокси",
+    "app_description": "Мощный асинхронный инструмент для тестирования прокси с поддержкой Telegram",
+    
+    "loading_proxies": "📖 Загружено {count} прокси из {file}",
+    "file_not_found": "❌ Файл {file} не найден!",
+    "no_proxies": "❌ Нет прокси для тестирования",
+    "testing_start": "🔍 Начинаю тестирование {count} прокси...",
+    "timeout_setting": "⏱️ Таймаут: {timeout} сек",
+    "concurrent_setting": "🔄 Макс. параллельных проверок: {concurrent}",
+    "testing": "Проверка прокси",
+    
+    "statistics": "📊 СТАТИСТИКА",
+    "total_checked": "Всего проверено: {count}",
+    "working": "Рабочих: {count}",
+    "not_working": "Не рабочих: {count}",
+    "success_rate": "Успешность: {rate:.1f}%",
+    
+    "working_by_type": "Рабочие прокси по типам:",
+    "socks5": "SOCKS5: {count} шт",
+    "socks4": "SOCKS4: {count} шт",
+    "https": "HTTPS: {count} шт",
+    "http": "HTTP: {count} шт",
+    
+    "saved_proxies": "💾 Сохранено {count} рабочих прокси в {file}",
+    "saved_sorted": "📊 Сортировка выполнена по типам (SOCKS5 → HTTPS → HTTP)",
+    "no_working_proxies": "⚠️ Нет рабочих прокси для сохранения",
+    
+    "examples_title": "📋 ПРИМЕРЫ РАБОЧИХ ПРОКСИ:",
+    "examples_more": "... и еще {count}",
+    
+    "testing_complete": "✅ Тестирование завершено!",
+    "no_working_found": "❌ Не найдено рабочих прокси!",
+    
+    "telegram_title": "🚀 TELEGRAM ПРОКСИ ТЕСТЕР",
+    "telegram_checking": "🔍 Начинаю тестирование {count} прокси для Telegram...",
+    "telegram_with_token": "🤖 Проверка с токеном бота: {token}...",
+    "telegram_without_token": "🤖 Проверка без токена (только доступность Telegram API)",
+    
+    "telegram_working": "Рабочих для Telegram: {count}",
+    "telegram_usage_title": "💡 Эти прокси можно использовать для:",
+    "telegram_usage_1": "• Запуска Telegram ботов",
+    "telegram_usage_2": "• Работы с Telegram API",
+    "telegram_usage_3": "• Парсинга Telegram",
+    
+    "proxy_connection_error": "❌ Ошибка подключения к прокси: {error}",
+    "timeout_error": "❌ Таймаут ({timeout}с)",
+    "client_error": "❌ Ошибка клиента: {error}",
+    "unknown_error": "❌ Неизвестная ошибка: {error}",
+    "test_failed": "❌ Не прошло тесты",
+    
+    "telegram_connection_failed": "❌ Не удалось подключиться к Telegram",
+    "telegram_api_available": "✅ Telegram API доступен через {type}",
+    "telegram_bot_working": "✅ Telegram бот работает через {type} - {info}",
+    "telegram_api_not_responding": "⚠️ Telegram доступен, но API не отвечает через {type}",
+    
+    "menu": {
+        "title": "📋 ДОСТУПНЫЕ РЕЖИМЫ ПРОВЕРКИ",
+        "standard": "Стандартная проверка прокси",
+        "standard_desc": "Проверяет прокси на работоспособность через HTTP/HTTPS запросы",
+        "telegram": "Проверка для Telegram",
+        "telegram_desc": "Проверяет прокси специально для Telegram API и ботов",
+        "exit": "Выход",
+        "reset": "Сбросить настройки",
+        "choice": "Выберите режим (0-2): ",
+        "prompt": "Выберите режим (0-2, r для сброса): "
+    },
+
+    "reset": {
+        "title": "СБРОС НАСТРОЕК",
+        "warning": "Это сбросит все настройки к значениям по умолчанию!",
+        "confirm": "Вы уверены, что хотите сбросить все настройки? (y/n): ",
+        "success": "Настройки сброшены к значениям по умолчанию!",
+        "restart": "Пожалуйста, перезапустите программу.",
+        "cancelled": "Сброс отменен"
+    },
+
+    "create_template_question": "📝 Создать шаблонный файл? (y/n): ",
+    "press_enter": "Нажмите Enter для продолжения...",
+
+    "template": {
+        "header": "Примеры прокси (раскомментируйте нужные строки)",
+        "format": "Формат: IP:PORT или http://IP:PORT или socks5://IP:PORT",
+        "examples": "Примеры",
+        "working_examples": "Рабочие примеры (можно удалить)",
+        "created": "Создан шаблонный файл '{file}'",
+        "add_proxies": "Добавьте ваши прокси в этот файл и запустите программу снова",
+        "error": "Ошибка создания файла: {error}"
+    },
+    
+    "input_file": {
+        "title": "📂 НАСТРОЙКА ВХОДНОГО ФАЙЛА",
+        "default_question": "📁 Использовать файл по умолчанию ",
+        "enter_filename": "📁 Введите имя файла с прокси: ",
+        "using_default": "⚠️ Использую файл по умолчанию: {file}"
+    },
+    
+    "telegram_setup": {
+        "title": "🤖 НАСТРОЙКА TELEGRAM ПРОВЕРКИ",
+        "bot_token_question": "Хотите проверить с токеном бота? (y/n): ",
+        "enter_token": "Введите токен Telegram бота: ",
+        "token_added": "✅ Токен добавлен"
+    },
+    
+    "advanced_settings": {
+        "title": "⚙️ РАСШИРЕННЫЕ НАСТРОЙКИ",
+        "press_enter": "Нажмите Enter для использования значений по умолчанию",
+        "timeout": "⏱️ Таймаут (сек) ",
+        "concurrent": "🔄 Параллельных проверок "
+    },
+    
+    "confirmation": {
+        "title": "📋 ПОДТВЕРЖДЕНИЕ ЗАПУСКА",
+        "mode": "Режим: {mode}",
+        "input_file": "Входной файл: {file}",
+        "timeout": "Таймаут: {timeout} сек",
+        "concurrent": "Параллельных проверок: {concurrent}",
+        "run_question": "✅ Запустить проверку? (y/n): ",
+        "cancelled": "❌ Проверка отменена",
+        "success": "✅ Скрипт завершил работу успешно",
+        "error": "⚠️ Скрипт завершил работу с ошибкой",
+        "interrupted": "⚠️ Проверка прервана пользователем"
+    },
+    
+    "results": {
+        "title": "📊 РЕЗУЛЬТАТЫ",
+        "working_count": "✅ Найдено рабочих прокси: {count}",
+        "saved_to": "💾 Результаты сохранены в: {file}",
+        "open_file": "📁 Открыть файл с результатами? (y/n): ",
+        "file_not_found": "⚠️ Файл с результатами не найден"
+    },
+    
+    "language": {
+        "title": "Select language / Выберите язык:",
+        "choice": "Your choice / Ваш выбор (1-2): "
+    },
+    
+    "errors": {
+        "invalid_choice": "❌ Неверный выбор!",
+        "script_not_found": "❌ Скрипт '{script}' не найден!",
+        "check_folder": "Убедитесь, что файл находится в той же папке",
+        "cannot_continue": "❌ Невозможно продолжить без файла с прокси",
+        "critical": "❌ Критическая ошибка: {error}"
+    },
+    
+    "proxy_type": "Тип прокси: {type}",
+    "latency": "Задержка: {latency}мс",
+    "bot_status": "Проверка бота: {status}",
+    "working_proxy": "✅ {type} работает - {info}",
+    "sorting": "📊 Сортировка выполнена по типам (SOCKS5 → HTTPS → HTTP)",
+    
+    "progress": {
+        "working_label": "Рабочих:",
+        "last_label": "последний"
+    }
+}
