@@ -1,4 +1,3 @@
-# proxy_tester_telegram.py
 import asyncio
 import aiohttp
 from aiohttp_socks import ProxyConnector
@@ -12,7 +11,6 @@ import argparse
 import os
 from pathlib import Path
 
-# Добавляем пути для импорта
 sys.path.insert(0, str(Path(__file__).parent))
 
 from locales import i18n
@@ -21,13 +19,11 @@ from config.settings import config
 class TelegramProxyTester:
     def __init__(self, input_file=None, output_file=None, timeout=None, 
                  max_concurrent=None, bot_token=None, lang=None):
-        # Загружаем настройки из конфига
         self.input_file = input_file or config.get_default_input_file('telegram')
         self.output_file = output_file or config.get_default_output_file('telegram')
         self.timeout = timeout or config.get('timeout', 10)
         self.max_concurrent = max_concurrent or config.get('max_concurrent', 50)
         
-        # Устанавливаем язык
         self.lang = lang or config.get('language', 'en')
         i18n.set_language(self.lang)
         
@@ -35,14 +31,12 @@ class TelegramProxyTester:
         self.working_by_type = defaultdict(list)
         self.bot_token = bot_token
         
-        # Telegram API endpoints для проверки
         self.telegram_endpoints = config.get('telegram_endpoints', [
             "https://api.telegram.org/bot",
             "https://api.telegram.org/bot/getMe",
             "https://api.telegram.org/bot/getUpdates",
         ])
         
-        # Базовые URL для проверки соединения с Telegram
         self.telegram_urls = config.get('telegram_urls', [
             "https://api.telegram.org",
             "https://web.telegram.org",
@@ -50,11 +44,9 @@ class TelegramProxyTester:
         ])
         
     def _t(self, key, **kwargs):
-        """Helper метод для получения перевода"""
         return i18n.get(key, **kwargs)
     
     def read_proxies(self):
-        """Читает прокси из файла"""
         proxies = []
         try:
             with open(self.input_file, 'r', encoding='utf-8') as f:
@@ -74,14 +66,11 @@ class TelegramProxyTester:
             return []
     
     def normalize_proxy(self, proxy_str):
-        """Приводит прокси к единому формату"""
         proxy_str = proxy_str.strip()
         
-        # Если уже есть схема
         if proxy_str.startswith(('http://', 'https://', 'socks4://', 'socks5://')):
             return proxy_str
         
-        # Если есть только IP:PORT
         if ':' in proxy_str:
             parts = proxy_str.split(':')
             if len(parts) >= 2:
@@ -97,7 +86,6 @@ class TelegramProxyTester:
         return None
     
     def get_proxy_type(self, proxy_url):
-        """Определяет тип прокси"""
         if proxy_url.startswith('socks5://'):
             return 'socks5'
         elif proxy_url.startswith('socks4://'):
@@ -109,7 +97,6 @@ class TelegramProxyTester:
         return 'http'
     
     async def test_telegram_connection(self, proxy_url, session):
-        """Тестирует подключение к Telegram через прокси"""
         proxy_type = self.get_proxy_type(proxy_url)
         
         for telegram_url in self.telegram_urls:
@@ -127,7 +114,6 @@ class TelegramProxyTester:
         return False, None
     
     async def test_bot_api(self, proxy_url, session):
-        """Тестирует API бота Telegram"""
         proxy_type = self.get_proxy_type(proxy_url)
         
         if self.bot_token:
@@ -161,7 +147,6 @@ class TelegramProxyTester:
         return False, None
     
     async def test_single_proxy(self, proxy_url):
-        """Тестирует один прокси для Telegram"""
         proxy_type = self.get_proxy_type(proxy_url)
         
         try:
@@ -202,7 +187,6 @@ class TelegramProxyTester:
             return False, proxy_url, self._t('unknown_error', error=str(e))
     
     async def test_proxies_batch(self, proxies, detailed=False):
-        """Тестирует прокси батчами с прогресс-баром"""
         semaphore = asyncio.Semaphore(self.max_concurrent)
         
         async def test_with_semaphore(proxy):
@@ -241,7 +225,6 @@ class TelegramProxyTester:
         return results
     
     async def test_single_proxy_detailed(self, proxy_url):
-        """Расширенное тестирование прокси для Telegram"""
         proxy_type = self.get_proxy_type(proxy_url)
         results = {}
         
@@ -310,21 +293,18 @@ class TelegramProxyTester:
             return False, proxy_url, self._t('error_via', type=proxy_type.upper(), error=str(e)[:50])
     
     def save_working_proxies(self):
-        """Сохраняет рабочие прокси в файл с сортировкой по типам"""
         if not self.working_proxies:
             print(self._t('no_working_proxies'))
             return
         
         try:
             with open(self.output_file, 'w', encoding='utf-8') as f:
-                # Заголовок
                 f.write(f"# {self._t('telegram_title')} - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"# {self._t('total_checked', count=len(self.working_proxies))}\n")
                 f.write(f"# {self._t('sorting')}\n")
                 f.write(f"# {self._t('telegram_note')}\n")
                 f.write("#" + "=" * 58 + "\n\n")
                 
-                # Статистика по типам
                 f.write(f"# {self._t('working_by_type')}\n")
                 for proxy_type in ['socks5', 'socks4', 'https', 'http']:
                     count = len(self.working_by_type.get(proxy_type, []))
@@ -332,7 +312,6 @@ class TelegramProxyTester:
                         f.write(f"#   {proxy_type.upper()}: {count}\n")
                 f.write("\n")
                 
-                # Сортируем по приоритету
                 type_order = ['socks5', 'socks4', 'https', 'http']
                 
                 for proxy_type in type_order:
@@ -349,7 +328,6 @@ class TelegramProxyTester:
             print(self._t('unknown_error', error=str(e)))
     
     async def run(self):
-        """Запускает тестирование"""
         print("=" * 60)
         print(f"🚀 {self._t('telegram_title')}")
         print("=" * 60)
@@ -411,7 +389,6 @@ class TelegramProxyTester:
         print(f"\n{self._t('testing_complete')}")
 
 def main():
-    """Основная функция"""
     parser = argparse.ArgumentParser(description='Telegram proxy tester with multi-language support')
     parser.add_argument('-i', '--input', help='Input file with proxies')
     parser.add_argument('-o', '--output', help='Output file for working proxies')
@@ -422,7 +399,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Определяем язык
     lang = args.lang
     if not lang and config.get('auto_detect_language', True):
         lang = config.detect_language()
